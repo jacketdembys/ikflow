@@ -27,7 +27,7 @@ notes_to_self
 notes
 
 # Datasets
-datasets/*/
+#datasets/*/
 
 # Slurm log files
 *.out
