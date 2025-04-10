@@ -221,7 +221,15 @@ def oscillate_target(ik_solver: IKFlowSolver, nb_sols=5, fixed_latent=True):
         latent = torch.randn((nb_sols, ik_solver.network_width)).to(DEVICE)
 
     robot = ik_solver.robot
+    #print("\n\nDEBUG: Here 1\n\n")
+    #print(robot.name)
+    #print(FetchArm.name)
     target_pose_fn = _TARGET_POSE_FUNCTIONS[robot.name]
+    #c = 0
+    #print(c)
+    #print(type(c))
+    #print(target_pose_fn(c))
+    #print("\n\nDEBUG: Here 2\n\n")
 
     def setup_fn(worlds):
         vis.add("coordinates", coordinates.manager())
@@ -254,8 +262,12 @@ def oscillate_target(ik_solver: IKFlowSolver, nb_sols=5, fixed_latent=True):
 
     def loop_fn(worlds, _demo_state):
         # Update target pose
+        #print("\n\nDEBUG: Here 4\n\n")
+        #print(_demo_state.counter)
+        #print(type(_demo_state.counter))
         _demo_state.target_pose = target_pose_fn(_demo_state.counter)
-
+        #print("\n\nDEBUG: Here 5\n\n")
+        
         # Get solutions to pose of random sample
         ik_solutions = ik_solver.generate_ik_solutions(_demo_state.target_pose, nb_sols, latent=latent)
         l2_errors, ang_errors = solution_pose_errors(ik_solver.robot, ik_solutions, _demo_state.target_pose)
@@ -278,7 +290,11 @@ def oscillate_target(ik_solver: IKFlowSolver, nb_sols=5, fixed_latent=True):
         vis.logPlot("solution_error", "l2 (mm)", _demo_state.ave_l2_error)
         vis.logPlot("solution_error", "angular (deg)", _demo_state.ave_ang_error)
 
+
+   
     demo_state = DemoState(counter=0, target_pose=target_pose_fn(0), ave_l2_error=0, ave_angular_error=0)
+    
+    #print("\n\nDEBUG: Here 3\n\n")
     _run_demo(
         robot, nb_sols, setup_fn, loop_fn, viz_update_fn, demo_state=demo_state, time_p_loop=time_p_loop, title=title
     )

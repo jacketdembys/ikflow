@@ -37,7 +37,7 @@ class IkflowModelParameters:
     def __str__(self) -> str:
         s = "IkflowModelParameters\n"
         for k, v in self.__dict__.items():
-            s += f"  {k}: \t{v}\n"
+            s += f"  {k}:   {v}\n"
         return s
 
 

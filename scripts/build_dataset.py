@@ -54,12 +54,12 @@ def print_saved_datasets_stats(tags: List[str], robots: Optional[Robot] = []):
 
         try:
             samples_tr_file_path, _, _, _, _ = get_dataset_filepaths(dataset_directory, tags)
-            samples_tr = torch.load(samples_tr_file_path)
+            samples_tr = torch.load(samples_tr_file_path, weights_only=False)
             sum_joint_range = get_sum_joint_limit_range(samples_tr)
             print(f"{robot_name} {sp} {dataset_name} {sp} {sum_joint_range}")
         except FileNotFoundError:
             samples_tr_file_path, _, _, _, _ = get_dataset_filepaths(dataset_directory, ALL_DATASET_TAGS)
-            samples_tr = torch.load(samples_tr_file_path)
+            samples_tr = torch.load(samples_tr_file_path, weights_only=False)
             sum_joint_range = get_sum_joint_limit_range(samples_tr)
             print(f"{robot_name} {sp} {dataset_name} {sp} {sum_joint_range}")
 
@@ -175,6 +175,7 @@ if __name__ == "__main__":
     # Build dataset
     print(f"Building dataset for robot: {robot}")
     dset_directory = get_dataset_directory(robot.name)
+    print(f"Dataset location: {dset_directory}")
     t0 = time()
     save_dataset_to_disk(
         robot,

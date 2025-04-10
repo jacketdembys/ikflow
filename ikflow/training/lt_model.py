@@ -9,7 +9,7 @@ from pytorch_lightning.core.module import LightningModule
 
 from ikflow.training.training_utils import get_softflow_noise
 from ikflow import config
-from ikflow.config import SIGMOID_SCALING_ABS_MAX
+from ikflow.config import SIGMOID_SCALING_ABS_MAX, DEVICE
 from ikflow.ikflow_solver import IKFlowSolver, draw_latent
 from ikflow.model import IkflowModelParameters
 from ikflow.utils import grad_stats
