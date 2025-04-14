@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 import os
+import numpy as np
 from jrl.robots import get_robot
 from ikflow.evaluation_utils import (
     _get_target_pose_batch,
@@ -11,11 +12,34 @@ from ikflow.evaluation_utils import (
 )
 
 # Dataset loader
+"""
 class DiffIKDataset(Dataset):
     def __init__(self, filename_D, filename_Q):
-        self.q = torch.load(filename_Q) #.cpu()
-        self.pose = torch.load(filename_D) #.cpu()
+        self.q = torch.load(filename_Q, map_location='cpu').clone().contiguous()
+        self.pose = torch.load(filename_D, map_location='cpu').clone().contiguous()
+        print(f"Device: {self.q.device}")
+        
         assert self.q.shape[0] == self.pose.shape[0]
+
+    def __len__(self):
+        return self.q.shape[0]
+
+    def __getitem__(self, idx):
+        return {
+            "q": self.q[idx],
+            "pose": self.pose[idx],
+        }
+"""
+class DiffIKDataset(Dataset):
+    def __init__(self, filename_D, filename_Q):
+        # Load .npy files using NumPy
+        self.q = torch.from_numpy(np.load(filename_Q)).float()
+        self.pose = torch.from_numpy(np.load(filename_D)).float()
+        
+        print(f"Loaded q.shape: {self.q.shape}, pose.shape: {self.pose.shape}")
+        print(f"Device: {self.q.device}")
+
+        assert self.q.shape[0] == self.pose.shape[0], "Mismatch in sample count"
 
     def __len__(self):
         return self.q.shape[0]
@@ -133,8 +157,8 @@ if __name__ == "__main__":
     robot = get_robot("panda")
 
 
-    filename_Dtr = '/home/jacket/.cache/ikflow/datasets/panda/endpoints_tr.pt__tag0=non-self-colliding'
-    filename_Qtr = '/home/jacket/.cache/ikflow/datasets/panda/samples_tr.pt__tag0=non-self-colliding'
+    filename_Dtr = '/home/jacket/Documents/ikflow/datasets/panda/endpoints_tr.npy'
+    filename_Qtr = '/home/jacket/Documents/ikflow/datasets/panda/samples_tr.npy'
     train_dataset = DiffIKDataset(filename_Dtr, filename_Qtr)
     #train_loader = DataLoader(train_dataset, 
     #                            batch_size=batch_size, 
@@ -149,8 +173,8 @@ if __name__ == "__main__":
     )
   
 
-    filename_Dte = '/home/jacket/.cache/ikflow/datasets/panda/endpoints_te.pt__tag0=non-self-colliding'
-    filename_Qte = '/home/jacket/.cache/ikflow/datasets/panda/samples_te.pt__tag0=non-self-colliding'
+    filename_Dte = '/home/jacket/Documents/ikflow/datasets/panda/endpoints_te.npy'
+    filename_Qte = '/home/jacket/Documents/ikflow/datasets/panda/samples_te.npy'
     val_dataset = DiffIKDataset(filename_Dte, filename_Qte) 
     val_loader = DataLoader(val_dataset, 
                             batch_size=batch_size)
