@@ -6,6 +6,9 @@ import torch
 from jrl.config import DEVICE
 
 DEFAULT_TORCH_DTYPE = torch.float32
+#DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+#DEVICE = torch.device("cpu")
+   
 print(f"ikflow/config.py | Using device: '{DEVICE}'")
 
 # ~/.cache/ikflow/
