@@ -157,8 +157,8 @@ if __name__ == "__main__":
     robot = get_robot("panda")
 
 
-    filename_Dtr = '/home/jacket/Documents/ikflow/datasets/panda/endpoints_tr.npy'
-    filename_Qtr = '/home/jacket/Documents/ikflow/datasets/panda/samples_tr.npy'
+    filename_Dtr = '/home/ikflow/datasets/panda/endpoints_tr.npy'
+    filename_Qtr = '/home/ikflow/datasets/panda/samples_tr.npy'
     train_dataset = DiffIKDataset(filename_Dtr, filename_Qtr)
     #train_loader = DataLoader(train_dataset, 
     #                            batch_size=batch_size, 
@@ -173,8 +173,8 @@ if __name__ == "__main__":
     )
   
 
-    filename_Dte = '/home/jacket/Documents/ikflow/datasets/panda/endpoints_te.npy'
-    filename_Qte = '/home/jacket/Documents/ikflow/datasets/panda/samples_te.npy'
+    filename_Dte = '/home/ikflow/datasets/panda/endpoints_te.npy'
+    filename_Qte = '/home/ikflow/datasets/panda/samples_te.npy'
     val_dataset = DiffIKDataset(filename_Dte, filename_Qte) 
     val_loader = DataLoader(val_dataset, 
                             batch_size=batch_size)
